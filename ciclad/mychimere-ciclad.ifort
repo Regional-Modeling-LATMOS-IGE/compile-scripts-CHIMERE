@@ -1,0 +1,96 @@
+#!/bin/bash
+
+#---------------------------------------------------------------------------------
+#	Architecture file for compiling and running CHIMERE	
+#	Specify path to libraries, compilers and utilities 
+#---------------------------------------------------------------------------------
+
+## Modules
+module purge
+module load intel/15.0.6.233
+module load openmpi/1.6.5-ifort 
+module load netcdf4/4.4.1.1-parallel-ifort
+module load hdf5/1.8.18-parallel-ifort
+
+#---------------------------------------------------------------------------------
+# 	Compilers
+#---------------------------------------------------------------------------------
+export my_compilerF90=/opt/intel/15.0.6.233/composer_xe_2015.6.233/bin/intel64/ifort		# Path to Fortran 90 compiler
+export my_compilerC=/opt/intel/15.0.6.233/composer_xe_2015.6.233/bin/intel64/icc			# Path to C compiler
+export my_compilerCpp=/opt/intel/15.0.6.233/composer_xe_2015.6.233/bin/intel64/icpc			# Path to C++ compiler
+
+
+#---------------------------------------------------------------------------------
+# 	MPI - parallel execution of chimere
+#---------------------------------------------------------------------------------
+export  my_mpiframe=openmpi  		                            	# implementaion of MPI norm [ ompi / ccrt ] TO REMOVE
+export  my_mpibin=/usr/lib64/openmpi/1.6.5-ifort/bin    			# Path to MPI binary directory
+export  my_mpirun=/usr/lib64/openmpi/1.6.5-ifort/bin/mpirun    		# Path to mpirun to execute parallel job in MPI
+export  my_mpif90=/usr/lib64/openmpi/1.6.5-ifort/bin/mpif90    		# Wrapper to my_compilerF90 to link with MPI library
+export  my_mpicc=/usr/lib64/openmpi/1.6.5-ifort/bin/mpicc     		# Wrapper to my_compilerC to link with MPI library
+export  my_mpilib=/usr/lib64/openmpi/1.6.5-ifort/lib    			# Path to MPI libraries directory
+export  my_mpiinc=/usr/lib64/openmpi/1.6.5-ifort/include    		# Path to MPI include files directory
+
+
+#---------------------------------------------------------------------------------
+# 	HDF5  - parallel version	
+#---------------------------------------------------------------------------------
+export my_hdflib=/opt/hdf5/1.8.18-parallel/ifort/lib		# Path to HDF5 parallel library directory
+export my_hdfinc=/opt/hdf5/1.8.18-parallel/ifort/include	# Path to HDF5 parallel include files directory
+
+
+#---------------------------------------------------------------------------------
+# 	NETCDF-C  - link with HDF5 parallel 
+#---------------------------------------------------------------------------------
+export my_netcdfCbin=/opt/netcdf4/4.4.1.1-parallel/ifort/bin 		# Path to NETCDF-C (linked with HDF5 parallel) binaries directory 
+export my_netcdfClib=/opt/netcdf4/4.4.1.1-parallel/ifort/lib		# Path to NETCDF-C (linked with HDF5 parallel) library directory
+
+
+#---------------------------------------------------------------------------------
+# 	NETCDF-Fortran  - link with HDF5 parallel and NETCDF-C
+#---------------------------------------------------------------------------------
+export my_netcdfF90bin=/opt/netcdf4/4.4.1.1-parallel/ifort/bin      # PATH to NETCDF-Fortran (linked with HDF5 parallel and NETCDF-C) binaries  directory
+export my_netcdfF90lib=/opt/netcdf4/4.4.1.1-parallel/ifort/lib		# Path to NETCDF-Fortran (linked with HDF5 parallel and NETCDF-C) library  directory
+export my_netcdfF90inc=/opt/netcdf4/4.4.1.1-parallel/ifort/include	# Path to NETCDF-Fortran (linked with HDF5 parallel and NETCDF-C) include files  directory
+
+
+#---------------------------------------------------------------------------------
+# 	GRIB  - link with jasper 
+#---------------------------------------------------------------------------------
+export my_griblib=/climserv-home/rpennel/local/grib_api-1.15.0_ifort/lib     	# Path to GRIB library directory
+export my_gribinc=/climserv-home/rpennel/local/grib_api-1.15.0_ifort/include 	# Path to GRIB include files directory
+export my_jasperlib=/usr/lib64 		                	                # Path to JASPER library directory
+export my_jasperinc=/usr/include/jasper			                        # Path to JASPER include files directory
+
+
+#---------------------------------------------------------------------------------
+# 	BLITZ
+#---------------------------------------------------------------------------------
+export my_blitzinc=/climserv-home/rpennel/local/blitz/include/blitz-0.10		 # Path to BLITZ include files 
+
+
+#---------------------------------------------------------------------------------
+# 	Utilities	
+#---------------------------------------------------------------------------------
+export my_make=make 	                                        	# Path to make 
+export my_awk=awk		                                        	# Path to awk
+export my_ncdump=/opt/netcdf4/4.4.1.1-parallel/ifort/bin/ncdump		# Path to ncdump
+
+
+#---------------------------------------------------------------------------------
+# 	Makefile header needed to compile CHIMERE and WRF 
+#	     - with this architecture configuration - 	
+#---------------------------------------------------------------------------------
+export my_hdr=Makefile.hdr.ifort-64-ompi   		            	# Makefile header to compile CHIMERE in makefiles.hdr directory
+export configure_wrf_file_name=configure.wrf.ifort             	# Makefile header to compile WRF in config_wrf directory
+export configure_wps_file_name=configure_ifort.wps          	# Makefile header to compile WPS in config_wps directory
+
+
+#---------------------------------------------------------------------------------
+#	Export of Shared Library to be available at run time 	
+#---------------------------------------------------------------------------------
+export LD_LIBRARY_PATH=${my_hdflib}:${my_netcdfF90lib}:${my_netcdfClib}:${my_griblib}:${my_mpilib}:${my_mpilib}/openmpi:$LD_LIBRARY_PATH
+
+
+
+
