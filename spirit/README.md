@@ -15,9 +15,7 @@ Details for compiling CHIMERE on SPIRIT using intel compiler
 2. Execute **./build-chimere.sh --arch spirit.ifort --wrf**
 
 ##Steps for compiling WPS for WRF-CHIMERE coupling simulations
-1. Download the WPS source code (https://github.com/wrf-model/WPS)
-
-tested version = WPS4.4
+1. Download the WPS source code (https://github.com/wrf-model/WPS ; tested version = WPS4.4)
 2. Copy **configurewps.sh** and **compilewps.sh** in the WPS directory and check the **WRF\_DIR** path in these files
 3. Execute **./configurewps.sh**
 4. Execute **./compilewps.sh**
